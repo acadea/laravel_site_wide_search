@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\SplFileInfo;
+use function GuzzleHttp\Psr7\parse_request;
 
 class SitewideSearchController extends Controller
 {
@@ -50,15 +55,101 @@ class SitewideSearchController extends Controller
 
             return $isModel && $searchable;
 
-        })->flatMap(function ($classname) use ($keyword) {
+        })->map(function ($classname) use ($keyword) {
             // for each class, call the search function
             $model = app($this->modelNamespacePrefix() . $classname);
-            return $model::search($keyword);
-        });
 
-        dd($results);
+            // assume there is a resource class following the convention
+            /** @var JsonResource $resourceClass*/
+            $resourceClass = '\\App\\Http\\Resources\\' . $classname . 'Resource';
+//            return $model::search($keyword)->get();
+//            dd($resourceClass);
+            $collection = $resourceClass::collection($model::search($keyword)->get());
+            return ($collection->collection->map(function ($modelRecord) use ($model, $keyword, $classname){
+                $fields = array_filter($model::SEARCHABLE_FIELDS, fn($field) => $field !== 'id');
+
+                $fieldsData = $modelRecord->resource->only($fields);
+
+                $serializedValues = collect($fieldsData)->join('');
+
+                $searchPos = strpos(strtolower($serializedValues), strtolower($keyword));
+                // including the found terms
+                if($searchPos !== false){
+                    // buffer of +- 10 characters
+                    $buffer = 10;
+                    $start = $searchPos - $buffer;
+                    $start = $start < 0 ? 0 : $start;
+                    $length = strlen($keyword) + 2 * $buffer;
 
 
+
+                    $sliced = substr($serializedValues, $start, $length);
+                    // adding prefix
+                    $shouldAddPrefix = $start > 0;
+                    $shouldAddPostfix = ($start + $length) < strlen($serializedValues) ;
+
+                    $sliced =  $shouldAddPrefix ? '...' . $sliced : $sliced;
+                    // adding end dots
+                    $sliced = $shouldAddPostfix ? $sliced . '...' : $sliced;
+
+                    if($modelRecord->id === 6){
+//                        dump(($start + $length) < strlen($serializedValues) );
+//                        dump(strlen($serializedValues));
+//                        dump($start);
+//                        dump($length);
+//                        dump($start + $length);
+//                        dump($shouldAddPostfix);
+//                        dump($serializedValues);
+                    }
+
+                }
+                $modelRecord->setAttribute('searched', $sliced);
+                $modelRecord->setAttribute('model', $classname);
+                return $modelRecord;
+            }));
+        })->flatten(1);
+
+        return new JsonResponse([
+            'data' => $results,
+        ]);
+
+
+//        46
+//        -5
+//22
+//17
+//37
+//24
+//22
+//46
+//63
+//22
+//22
+//44
+//53
+//-10
+//22
+//12
+//89
+//22
+//22
+//44
+//104
+//39
+//22
+//61
+//93
+//68
+//22
+//90
+//74
+//31
+//22
+//53
+//89
+//29
+//22
+//51
 
 
     }

@@ -4,18 +4,26 @@
     <list default="true" id="e539ecc5-312e-4aa3-bee8-03b27e56044b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../../frontend/frontend_2_intro_to_js/ep7-exception/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend_2_intro_to_js/ep7-exception/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../gh_public_repos/frontend_javascript_intro_course" beforeDir="false" afterPath="$PROJECT_DIR$/../../gh_public_repos/frontend_javascript_intro_course" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SitewideSearchController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SitewideSearchController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Comment.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Comment.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Post.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Post.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/comments.index" beforeDir="false" afterPath="$PROJECT_DIR$/storage/comments.index" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/posts.index" beforeDir="false" afterPath="$PROJECT_DIR$/storage/posts.index" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
@@ -145,6 +153,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager">
@@ -162,6 +171,7 @@
       <option name="presentableId" value="Default" />
       <updated>1602489403419</updated>
       <workItem from="1602489404450" duration="4577000" />
+      <workItem from="1602494241708" duration="11460000" />
     </task>
     <servers />
   </component>
@@ -169,9 +179,13 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2543" y="237" width="672" height="678" key="search.everywhere.popup" timestamp="1602494217882">
+    <state x="2369" y="174" key="SettingsEditor" timestamp="1602510851424">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="2543" y="237" width="672" height="678" key="search.everywhere.popup/67.27.1853.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602494217882" />
+    <state x="2369" y="174" key="SettingsEditor/67.27.1853.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602510851424" />
+    <state x="2543" y="237" width="672" height="678" key="search.everywhere.popup" timestamp="1602508960824">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2543" y="237" width="672" height="678" key="search.everywhere.popup/67.27.1853.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602508960824" />
   </component>
 </project>
