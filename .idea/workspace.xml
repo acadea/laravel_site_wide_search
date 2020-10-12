@@ -4,14 +4,7 @@
     <list default="true" id="e539ecc5-312e-4aa3-bee8-03b27e56044b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../../frontend/frontend_2_intro_to_js/ep7-exception/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend_2_intro_to_js/ep7-exception/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../gh_public_repos/frontend_javascript_intro_course" beforeDir="false" afterPath="$PROJECT_DIR$/../../gh_public_repos/frontend_javascript_intro_course" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SitewideSearchController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SitewideSearchController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Comment.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Comment.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Post.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Post.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/comments.index" beforeDir="false" afterPath="$PROJECT_DIR$/storage/comments.index" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/posts.index" beforeDir="false" afterPath="$PROJECT_DIR$/storage/posts.index" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +164,7 @@
       <option name="presentableId" value="Default" />
       <updated>1602489403419</updated>
       <workItem from="1602489404450" duration="4577000" />
-      <workItem from="1602494241708" duration="11460000" />
+      <workItem from="1602494241708" duration="11948000" />
     </task>
     <servers />
   </component>

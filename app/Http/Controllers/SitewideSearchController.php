@@ -81,8 +81,6 @@ class SitewideSearchController extends Controller
                     $start = $start < 0 ? 0 : $start;
                     $length = strlen($keyword) + 2 * $buffer;
 
-
-
                     $sliced = substr($serializedValues, $start, $length);
                     // adding prefix
                     $shouldAddPrefix = $start > 0;
@@ -92,18 +90,8 @@ class SitewideSearchController extends Controller
                     // adding end dots
                     $sliced = $shouldAddPostfix ? $sliced . '...' : $sliced;
 
-                    if($modelRecord->id === 6){
-//                        dump(($start + $length) < strlen($serializedValues) );
-//                        dump(strlen($serializedValues));
-//                        dump($start);
-//                        dump($length);
-//                        dump($start + $length);
-//                        dump($shouldAddPostfix);
-//                        dump($serializedValues);
-                    }
-
                 }
-                $modelRecord->setAttribute('searched', $sliced);
+                $modelRecord->setAttribute('searched', $sliced ?? $serializedValues);
                 $modelRecord->setAttribute('model', $classname);
                 return $modelRecord;
             }));
@@ -112,45 +100,6 @@ class SitewideSearchController extends Controller
         return new JsonResponse([
             'data' => $results,
         ]);
-
-
-//        46
-//        -5
-//22
-//17
-//37
-//24
-//22
-//46
-//63
-//22
-//22
-//44
-//53
-//-10
-//22
-//12
-//89
-//22
-//22
-//44
-//104
-//39
-//22
-//61
-//93
-//68
-//22
-//90
-//74
-//31
-//22
-//53
-//89
-//29
-//22
-//51
-
 
     }
 }
