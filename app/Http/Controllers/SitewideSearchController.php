@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SiteSearchResource;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
@@ -9,11 +10,13 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
-use function GuzzleHttp\Psr7\parse_request;
 
 class SitewideSearchController extends Controller
 {
+    const BUFFER = 10;  // 10 characters: to show 10 neighbouring characters around the searched word
     private function modelNamespacePrefix()
     {
         return app()->getNamespace() . 'Models\\';
@@ -52,7 +55,7 @@ class SitewideSearchController extends Controller
 
             // making sure the model implemented the searchable trait
             $searchable = $reflection->hasMethod('search');
-
+            // filter model that has the searchable trait
             return $isModel && $searchable;
 
         })->map(function ($classname) use ($keyword) {
@@ -60,12 +63,12 @@ class SitewideSearchController extends Controller
             $model = app($this->modelNamespacePrefix() . $classname);
 
             // assume there is a resource class following the convention
-            /** @var JsonResource $resourceClass*/
-            $resourceClass = '\\App\\Http\\Resources\\' . $classname . 'Resource';
-//            return $model::search($keyword)->get();
-//            dd($resourceClass);
-            $collection = $resourceClass::collection($model::search($keyword)->get());
-            return ($collection->collection->map(function ($modelRecord) use ($model, $keyword, $classname){
+//            /** @var JsonResource $resourceClass*/
+//            $resourceClass = '\\App\\Http\\Resources\\' . $classname . 'Resource';
+            // using a standardised site search resource
+            $resourceCollection = SiteSearchResource::collection($model::search($keyword)->get());
+
+            return $resourceCollection->collection->map(function ($modelRecord) use ($model, $keyword, $classname){
                 $fields = array_filter($model::SEARCHABLE_FIELDS, fn($field) => $field !== 'id');
 
                 $fieldsData = $modelRecord->resource->only($fields);
@@ -76,10 +79,9 @@ class SitewideSearchController extends Controller
                 // including the found terms
                 if($searchPos !== false){
                     // buffer of +- 10 characters
-                    $buffer = 10;
-                    $start = $searchPos - $buffer;
+                    $start = $searchPos - self::BUFFER;
                     $start = $start < 0 ? 0 : $start;
-                    $length = strlen($keyword) + 2 * $buffer;
+                    $length = strlen($keyword) + 2 * self::BUFFER;
 
                     $sliced = substr($serializedValues, $start, $length);
                     // adding prefix
@@ -93,13 +95,30 @@ class SitewideSearchController extends Controller
                 }
                 $modelRecord->setAttribute('searched', $sliced ?? $serializedValues);
                 $modelRecord->setAttribute('model', $classname);
+                $modelRecord->setAttribute('view_link', $this->resolveModelViewLink($modelRecord->resource));
                 return $modelRecord;
-            }));
+
+            });
         })->flatten(1);
 
         return new JsonResponse([
             'data' => $results,
         ]);
 
+    }
+
+    private function resolveModelViewLink(Model $model)
+    {
+        $map = [
+
+        ];
+        // converting model name to kebab case
+        $modelName = Str::plural(Arr::last(explode('\\', get_class($model))));
+
+        $modelName = Str::kebab(Str::camel($modelName));
+
+
+        // assume /{model-name}/{model_id}
+        return URL::to('/' . strtolower($modelName) . '/' . $model->id);
     }
 }
