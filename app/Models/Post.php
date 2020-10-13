@@ -8,9 +8,7 @@ use Laravel\Scout\Searchable;
 
 class Post extends Model
 {
-    use HasFactory;
-
-    use Searchable;
+    use HasFactory, Searchable;
 
     const SEARCHABLE_FIELDS = ['id', 'title', 'body'];
 

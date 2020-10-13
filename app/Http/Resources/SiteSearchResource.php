@@ -16,7 +16,7 @@ class SiteSearchResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'searched' => $this->searched,
+            'match' => $this->match,
             'model' => $this->model,
             'view_link' => $this->view_link,
         ];

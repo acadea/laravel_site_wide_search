@@ -18,7 +18,6 @@
             max-width: 300px;
         }
         ul>li{
-            cursor: pointer;
             padding-top: 5px;
             padding-bottom: 5px;
             padding-left: 15px;
@@ -32,7 +31,7 @@
 <body>
 
     {{--search bar--}}
-    <input id="search-bar" type="text">
+    <input id="search-bar" type="text" placeholder="Search Site">
 
     <ul id="results">
 
@@ -42,14 +41,19 @@
 
         const resultsList = document.getElementById('results');
 
-        function createLi(primary, secondary){
+        function createLi(searchResult){
             const li = document.createElement('li');
 
+            const link = document.createElement('a');
+            link.href = searchResult.view_link;
+            link.textContent = searchResult.model;
+
             const h4 = document.createElement('h4')
-            h4.textContent = primary
+
+            h4.appendChild(link);
 
             const span = document.createElement('span');
-            span.textContent = secondary;
+            span.textContent = searchResult.match;
 
             li.appendChild(h4);
             li.appendChild(span);
@@ -73,7 +77,7 @@
                 resultsList.innerHTML = '';
 
                 results.forEach((result) => {
-                    resultsList.appendChild(createLi(result.model, result.searched))
+                    resultsList.appendChild(createLi(result))
                 })
 
 

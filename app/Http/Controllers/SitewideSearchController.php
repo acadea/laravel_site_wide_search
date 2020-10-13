@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\SiteSearchResource;
-use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
@@ -17,17 +15,24 @@ use Symfony\Component\Finder\SplFileInfo;
 class SitewideSearchController extends Controller
 {
     const BUFFER = 10;  // 10 characters: to show 10 neighbouring characters around the searched word
+
+    /** A helper function to generate the model namespace
+     * @return string
+     */
     private function modelNamespacePrefix()
     {
         return app()->getNamespace() . 'Models\\';
     }
-
+    
     public function search(Request $request)
     {
         $keyword = $request->search;
 
+        // just for demonstration, you can exclude models from the searches here
+//        $toExclude = [Comment::class];
         $toExclude = [];
 
+        // getting all the model files from the model folder
         $files = File::allFiles(app()->basePath() . '/app/Models');
 
         // to get all the model classes
@@ -42,7 +47,7 @@ class SitewideSearchController extends Controller
             // removing .php
             return substr($filename, 0, -4);
 
-        })->filter(function (?string $classname){
+        })->filter(function (?string $classname) use($toExclude){
             if($classname === null){
                 return false;
             }
@@ -55,70 +60,107 @@ class SitewideSearchController extends Controller
 
             // making sure the model implemented the searchable trait
             $searchable = $reflection->hasMethod('search');
-            // filter model that has the searchable trait
-            return $isModel && $searchable;
+
+            // filter model that has the searchable trait and not in exclude array
+            return $isModel && $searchable && !in_array($reflection->getName(), $toExclude, true);
 
         })->map(function ($classname) use ($keyword) {
             // for each class, call the search function
             $model = app($this->modelNamespacePrefix() . $classname);
 
-            // assume there is a resource class following the convention
-//            /** @var JsonResource $resourceClass*/
-//            $resourceClass = '\\App\\Http\\Resources\\' . $classname . 'Resource';
-            // using a standardised site search resource
-            $resourceCollection = SiteSearchResource::collection($model::search($keyword)->get());
+            // Our goal here: to add these 3 attributes to each of our search result:
+            // a. `match` -- the match found in our model records
+            // b. `model` -- the related model name
+            // c. `view_link` -- the URL for the user to navigate in the frontend to view the resource
+            return $model::search($keyword)->get()->map(function ($modelRecord) use ($model, $keyword, $classname){
 
-            return $resourceCollection->collection->map(function ($modelRecord) use ($model, $keyword, $classname){
+                // to create the `match` attribute, we need to join the value of all the searchable fields in
+                // our model, ie all the fields defined in our 'toSearchableArray' model method
+                //
+                // We make use of the SEARCHABLE_FIELDS constant in our model
+                // we dont want id in the match, so we filter it out.
                 $fields = array_filter($model::SEARCHABLE_FIELDS, fn($field) => $field !== 'id');
 
-                $fieldsData = $modelRecord->resource->only($fields);
+                // only extracting the relevant fields from our model
+                $fieldsData = $modelRecord->only($fields);
 
-                $serializedValues = collect($fieldsData)->join('');
+                // joining the fields together
+                $serializedValues = collect($fieldsData)->join(' ');
 
+                // finding the position of match
                 $searchPos = strpos(strtolower($serializedValues), strtolower($keyword));
+
+                // Our goal here:
+                // After finding the match position, we also want to include the surrounding text, so our user would
+                // have a better search experience.
+                //
+                // We append or prepend `...` if there are more text before / after our match + neighbouring text
                 // including the found terms
                 if($searchPos !== false){
-                    // buffer of +- 10 characters
+
+                    // the buffer number dictates how many neighbouring characters to display
                     $start = $searchPos - self::BUFFER;
+
+                    // we don't want to go below 0 as the starting position
                     $start = $start < 0 ? 0 : $start;
+
+                    // multiply 2 buffer to cover the text before and after the match
                     $length = strlen($keyword) + 2 * self::BUFFER;
 
+                    // getting the match and neighbouring text
                     $sliced = substr($serializedValues, $start, $length);
-                    // adding prefix
+
+                    // adding prefix and postfix dots
+
+                    // if start position is negative, there is no need to prepend `...`
                     $shouldAddPrefix = $start > 0;
+                    // if end position went over the total length, there is no need to append `...`
                     $shouldAddPostfix = ($start + $length) < strlen($serializedValues) ;
 
                     $sliced =  $shouldAddPrefix ? '...' . $sliced : $sliced;
-                    // adding end dots
                     $sliced = $shouldAddPostfix ? $sliced . '...' : $sliced;
-
                 }
-                $modelRecord->setAttribute('searched', $sliced ?? $serializedValues);
+                // use $slice as the match, otherwise if undefined we use the first 20 character of serialisedValues
+                $modelRecord->setAttribute('match', $sliced ?? substr($serializedValues, 0, 20) . '...');
+                // setting the model name
                 $modelRecord->setAttribute('model', $classname);
-                $modelRecord->setAttribute('view_link', $this->resolveModelViewLink($modelRecord->resource));
+                // setting the resource link
+                $modelRecord->setAttribute('view_link', $this->resolveModelViewLink($modelRecord));
                 return $modelRecord;
 
             });
         })->flatten(1);
 
-        return new JsonResponse([
-            'data' => $results,
-        ]);
+        // using a standardised site search resource
+        return SiteSearchResource::collection($results);
 
     }
 
+    /** Helper function to retrieve resource URL
+     * @param Model $model
+     * @return string|string[]
+     */
     private function resolveModelViewLink(Model $model)
     {
-        $map = [
-
+        // Here we list down all the alternative model-link mappings
+        // if we dont have a record here, will default to /{model-name}/{model_id}
+        $mapping = [
+            \App\Models\Comment::class => '/comments/view/{id}'
         ];
-        // converting model name to kebab case
-        $modelName = Str::plural(Arr::last(explode('\\', get_class($model))));
 
+        // getting the Fully Qualified Class Name of model
+        $modelClass = get_class($model);
+
+        // converting model name to kebab case
+        $modelName = Str::plural(Arr::last(explode('\\', $modelClass)));
         $modelName = Str::kebab(Str::camel($modelName));
 
-
+        // attempt to get from $mapping. We assume every entry has an `{id}` for us to replace
+        if(Arr::has($mapping, $modelClass)){
+            return str_replace('{id}', $model->id, $mapping[$modelClass]);
+        }
         // assume /{model-name}/{model_id}
         return URL::to('/' . strtolower($modelName) . '/' . $model->id);
+
     }
 }

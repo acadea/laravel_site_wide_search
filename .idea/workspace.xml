@@ -4,6 +4,17 @@
     <list default="true" id="e539ecc5-312e-4aa3-bee8-03b27e56044b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../../frontend/frontend_2_intro_to_js/ep7-exception/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/frontend_2_intro_to_js/ep7-exception/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../gh_public_repos/frontend_javascript_intro_course" beforeDir="false" afterPath="$PROJECT_DIR$/../../gh_public_repos/frontend_javascript_intro_course" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SitewideSearchController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SitewideSearchController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Resources/SiteSearchResource.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/SiteSearchResource.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Post.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Post.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/CommentFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/CommentFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/PostFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/PostFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/sitesearch.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/sitesearch.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/comments.index" beforeDir="false" afterPath="$PROJECT_DIR$/storage/comments.index" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/posts.index" beforeDir="false" afterPath="$PROJECT_DIR$/storage/posts.index" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +182,8 @@
       <updated>1602489403419</updated>
       <workItem from="1602489404450" duration="4577000" />
       <workItem from="1602494241708" duration="12399000" />
-      <workItem from="1602560469366" duration="6253000" />
+      <workItem from="1602560469366" duration="16302000" />
+      <workItem from="1602577810903" duration="6123000" />
     </task>
     <servers />
   </component>
@@ -179,17 +191,17 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2369" y="174" key="SettingsEditor" timestamp="1602560541971">
+    <state x="2369" y="174" key="SettingsEditor" timestamp="1602579815091">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="2369" y="174" key="SettingsEditor/67.27.1853.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602560541971" />
-    <state x="2550" y="181" width="650" height="715" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1602564015366">
+    <state x="2369" y="174" key="SettingsEditor/67.27.1853.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602579815091" />
+    <state x="2550" y="181" width="650" height="715" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1602570842142">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="2550" y="181" width="650" height="715" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/67.27.1853.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602564015366" />
-    <state x="2543" y="237" width="672" height="678" key="search.everywhere.popup" timestamp="1602563926264">
+    <state x="2550" y="181" width="650" height="715" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/67.27.1853.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602570842142" />
+    <state x="2543" y="237" width="672" height="678" key="search.everywhere.popup" timestamp="1602583569746">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="2543" y="237" width="672" height="678" key="search.everywhere.popup/67.27.1853.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602563926264" />
+    <state x="2543" y="237" width="672" height="678" key="search.everywhere.popup/67.27.1853.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602583569746" />
   </component>
 </project>
