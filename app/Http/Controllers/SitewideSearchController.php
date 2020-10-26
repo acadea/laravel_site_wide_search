@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\SiteSearchResource;
-use App\Models\Comment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -23,7 +22,7 @@ class SitewideSearchController extends Controller
     {
         return app()->getNamespace() . 'Models\\';
     }
-    
+
     public function search(Request $request)
     {
         $keyword = $request->search;
@@ -72,14 +71,14 @@ class SitewideSearchController extends Controller
             // a. `match` -- the match found in our model records
             // b. `model` -- the related model name
             // c. `view_link` -- the URL for the user to navigate in the frontend to view the resource
-            return $model::search($keyword)->get()->map(function ($modelRecord) use ($model, $keyword, $classname){
 
-                // to create the `match` attribute, we need to join the value of all the searchable fields in
-                // our model, ie all the fields defined in our 'toSearchableArray' model method
-                //
-                // We make use of the SEARCHABLE_FIELDS constant in our model
-                // we dont want id in the match, so we filter it out.
-                $fields = array_filter($model::SEARCHABLE_FIELDS, fn($field) => $field !== 'id');
+            // to create the `match` attribute, we need to join the value of all the searchable fields in
+            // our model, ie all the fields defined in our 'toSearchableArray' model method
+
+            // We make use of the SEARCHABLE_FIELDS constant in our model
+            // we dont want id in the match, so we filter it out.
+            $fields = array_filter($model::SEARCHABLE_FIELDS, fn($field) => $field !== 'id');
+            return $model::search($keyword)->get()->map(function ($modelRecord) use ($model, $fields, $keyword, $classname){
 
                 // only extracting the relevant fields from our model
                 $fieldsData = $modelRecord->only($fields);
@@ -112,7 +111,7 @@ class SitewideSearchController extends Controller
 
                     // adding prefix and postfix dots
 
-                    // if start position is negative, there is no need to prepend `...`
+                    // if start position is 0, there is no need to prepend `...`
                     $shouldAddPrefix = $start > 0;
                     // if end position went over the total length, there is no need to append `...`
                     $shouldAddPostfix = ($start + $length) < strlen($serializedValues) ;
@@ -151,16 +150,17 @@ class SitewideSearchController extends Controller
         // getting the Fully Qualified Class Name of model
         $modelClass = get_class($model);
 
+        // attempt to get from $mapping. We assume every entry has an `{id}` for us to replace
+        if(Arr::has($mapping, $modelClass)){
+            return URL::to(str_replace('{id}', $model->id, $mapping[$modelClass]));
+        }
+
         // converting model name to kebab case
         $modelName = Str::plural(Arr::last(explode('\\', $modelClass)));
         $modelName = Str::kebab(Str::camel($modelName));
 
-        // attempt to get from $mapping. We assume every entry has an `{id}` for us to replace
-        if(Arr::has($mapping, $modelClass)){
-            return str_replace('{id}', $model->id, $mapping[$modelClass]);
-        }
         // assume /{model-name}/{model_id}
-        return URL::to('/' . strtolower($modelName) . '/' . $model->id);
+        return URL::to('/' . $modelName . '/' . $model->id);
 
     }
 }
