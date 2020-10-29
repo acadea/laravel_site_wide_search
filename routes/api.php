@@ -25,4 +25,5 @@ Route::group([
     Route::get('/site-search', [\App\Http\Controllers\SitewideSearchController::class, 'search']);
 
 
+
 });
